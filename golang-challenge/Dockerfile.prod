@@ -4,7 +4,8 @@ WORKDIR /usr/src/app
 
 COPY . .
 
-RUN go mod init hello-world
+RUN go mod init hello-world && \
+  go build -o hello-world .
 
 FROM scratch
 
@@ -12,4 +13,4 @@ WORKDIR /usr/src/app
 
 COPY --from=builder /usr/src/app .
 
-ENTRYPOINT [ "go", "run", "." ]
+ENTRYPOINT [ "./hello-world" ]
