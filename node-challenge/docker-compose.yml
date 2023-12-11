@@ -1,14 +1,14 @@
 version: "3"
 
 services:
-  node:
+  app:
     image: santosrj/node:latest
     build:
       context: node
       dockerfile: Dockerfile
-    container_name: node
+    container_name: app
     tty: true
-    # entrypoint: node /usr/src/app/index.js
+    entrypoint: node /usr/src/app/index.js
     volumes:
       - ./node:/usr/src/app
     networks:
