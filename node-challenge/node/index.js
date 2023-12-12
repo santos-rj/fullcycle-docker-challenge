@@ -11,17 +11,34 @@ const config = {
 
 const mysql = require("mysql");
 
-const connection = mysql.createConnection(config);
-
-const sql = `INSERT INTO people(name) VALUES('Rafael')`;
-
-connection.query(sql);
-connection.end();
-
 app.get("/", (req, res) => {
-  res.send("<h1>Full Cycle Rocks!</h1>");
+  const peoples = [{ name: "Rafael" }, { name: "Renessa" }, { name: "Maria" }];
+
+  const title = "<h1>Full Cycle Rocks!</h1>";
+
+  const list = `
+    <ul>
+      ${peoples
+        .map((people) => `<li>${people.name}</li>`)
+        .join("")
+        .toString()}
+    </ul>
+  `;
+
+  res.send(title + list);
 });
 
 app.listen(port, () => {
   console.log(`Running in port ${port}`);
+  runQuery(
+    `CREATE TABLE IF NOT EXISTS people(id int not null auto_increment, name varchar(255), primary key (id))`
+  );
+  runQuery(`INSERT INTO people(name) VALUES('Rafael')`);
 });
+
+function runQuery(query) {
+  const connection = mysql.createConnection(config);
+
+  connection.query(query);
+  connection.end();
+}
