@@ -2,6 +2,10 @@ FROM node:20
 
 WORKDIR /usr/src/app
 
+COPY package*.json ./
+
+RUN npm ci
+
 ENV DOCKERIZE_VERSION v0.7.0
 
 RUN apt-get update \
