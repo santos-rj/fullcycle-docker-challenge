@@ -1,6 +1,8 @@
 const express = require("express");
 
-const config = require("./config");
+const Configuration = require("./configuration");
+
+const config = new Configuration();
 
 const app = express();
 const port = 3000;
