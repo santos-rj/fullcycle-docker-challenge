@@ -3,14 +3,16 @@ const express = require("express");
 const Configuration = require("./configuration");
 
 const config = new Configuration();
+const Repository = require("./repository");
+const repository = new Repository();
 
 const app = express();
 const port = 3000;
 
-const mysql = require("mysql");
+app.get("/", async (req, res) => {
+  const selectAllPeoples = `SELECT * FROM people;`;
 
-app.get("/", (req, res) => {
-  const peoples = [{ name: "Rafael" }, { name: "Renessa" }, { name: "Maria" }];
+  const peoples = await repository.query(selectAllPeoples);
 
   const title = "<h1>Full Cycle Rocks!</h1>";
 
@@ -26,17 +28,12 @@ app.get("/", (req, res) => {
   res.send(title + list);
 });
 
-app.listen(port, () => {
+app.listen(port, async () => {
   console.log(`Running in port ${port}`);
-  runQuery(
-    `CREATE TABLE IF NOT EXISTS people(id int not null auto_increment, name varchar(255), primary key (id))`
-  );
-  runQuery(`INSERT INTO people(name) VALUES('Rafael')`);
+
+  const createTableIfNotExistsSql = `CREATE TABLE IF NOT EXISTS people(id int not null auto_increment, name varchar(255), primary key (id))`;
+  await repository.query(createTableIfNotExistsSql);
+
+  const insertNamesInPeopleTable = `INSERT INTO people(name) VALUES('Rafael'), ('Renessa'), ('Maria')`;
+  await repository.query(insertNamesInPeopleTable);
 });
-
-function runQuery(query) {
-  const connection = mysql.createConnection(config);
-
-  connection.query(query);
-  connection.end();
-}
