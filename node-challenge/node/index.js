@@ -1,13 +1,9 @@
 const express = require("express");
+
+const config = require("./config");
+
 const app = express();
 const port = 3000;
-
-const config = {
-  host: "db",
-  user: "root",
-  password: "root",
-  database: "nodedb",
-};
 
 const mysql = require("mysql");
 
