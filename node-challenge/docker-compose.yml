@@ -16,6 +16,8 @@ services:
       - node-network
     ports:
       - 3000:3000
+    depends_on:
+      - db
 
   db:
     image: mysql:5.7
@@ -45,6 +47,8 @@ services:
     command: ["nginx", "-g", "daemon off;"]
     networks:
       - node-network
+    depends_on:
+      - app
 
 networks:
   node-network:
