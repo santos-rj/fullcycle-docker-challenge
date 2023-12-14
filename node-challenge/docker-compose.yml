@@ -40,8 +40,10 @@ services:
     tty: true
     ports:
       - 8080:80
-    entrypoint: dockerize -wait tcp://app:3000 -timeout 20s docker-entrypoint.sh
+    entrypoint: dockerize -wait tcp://app:3000 -timeout 60s /docker-entrypoint.sh
     command: ["nginx", "-g", "daemon off;"]
+    networks:
+      - node-network
 
 networks:
   node-network:
