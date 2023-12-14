@@ -10,6 +10,11 @@ const app = express();
 const port = 3000;
 
 app.get("/", async (req, res) => {
+  const datetime = new Date().getTime();
+
+  const insertNamesInPeopleTable = `INSERT INTO people(name) VALUES('Rafael ${datetime}'), ('Renessa ${datetime}'), ('Maria ${datetime}')`;
+  await repository.query(insertNamesInPeopleTable);
+
   const selectAllPeoples = `SELECT * FROM people;`;
 
   const peoples = await repository.query(selectAllPeoples);
@@ -18,10 +23,14 @@ app.get("/", async (req, res) => {
 
   const list = `
     <ul>
-      ${peoples
-        .map((people) => `<li>${people.name}</li>`)
-        .join("")
-        .toString()}
+      ${
+        !!peoples.length
+          ? peoples
+              .map((people) => `<li>${people.name}</li>`)
+              .join("")
+              .toString()
+          : ""
+      }
     </ul>
   `;
 
@@ -30,12 +39,4 @@ app.get("/", async (req, res) => {
 
 app.listen(port, async () => {
   console.log(`Running in port ${port}`);
-
-  const createTableIfNotExistsSql = `CREATE TABLE IF NOT EXISTS people(id int not null auto_increment, name varchar(255), primary key (id))`;
-  await repository.query(createTableIfNotExistsSql);
-
-  const datetime = new Date().getTime();
-
-  const insertNamesInPeopleTable = `INSERT INTO people(name) VALUES('Rafael ${datetime}'), ('Renessa ${datetime}'), ('Maria ${datetime}')`;
-  await repository.query(insertNamesInPeopleTable);
 });
