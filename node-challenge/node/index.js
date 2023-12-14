@@ -34,6 +34,8 @@ app.listen(port, async () => {
   const createTableIfNotExistsSql = `CREATE TABLE IF NOT EXISTS people(id int not null auto_increment, name varchar(255), primary key (id))`;
   await repository.query(createTableIfNotExistsSql);
 
-  const insertNamesInPeopleTable = `INSERT INTO people(name) VALUES('Rafael'), ('Renessa'), ('Maria')`;
+  const datetime = new Date().getTime();
+
+  const insertNamesInPeopleTable = `INSERT INTO people(name) VALUES('Rafael ${datetime}'), ('Renessa ${datetime}'), ('Maria ${datetime}')`;
   await repository.query(insertNamesInPeopleTable);
 });
